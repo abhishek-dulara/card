@@ -477,28 +477,29 @@ END:VCARD`;
             </div>
 
             {/* Column 2: Download Contacts Button */}
-            <div className="flex justify-center">
+            <div className="flex justify-center w-full">
               <button
                 onClick={handleDownloadContact}
-                className="bg-gray-900 hover:bg-black text-white font-bold py-3.5 px-5 rounded-xl shadow-sm transition-all text-sm flex items-center justify-center gap-2 cursor-pointer w-full"
+                className="bg-[#f9fafb] hover:bg-gray-100 text-gray-800 border border-gray-200 font-bold py-4 px-6 rounded-xl shadow-sm transition-all text-sm flex items-center justify-center gap-2 cursor-pointer w-full h-[52px]"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 flex-shrink-0">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
                 </svg>
-                <span>Download Contacts</span>
+                {/* Text updated to 'Download Contacts' and truncate removed to ensure it displays fully on larger screens, will wrap on very small screens if needed */}
+                <span className="leading-tight">Download Contacts</span>
               </button>
             </div>
 
             {/* Column 3: View QR Code Button */}
-            <div className="flex justify-center">
+            <div className="flex justify-center w-full">
               <button
                 onClick={() => setIsQrModalOpen(true)}
-                className="bg-[#f9fafb] hover:bg-gray-100 text-gray-800 border border-gray-200 font-bold py-3.5 px-5 rounded-xl shadow-sm transition-all text-sm flex items-center justify-center gap-2 cursor-pointer w-full"
+                className="bg-[#f9fafb] hover:bg-gray-100 text-gray-800 border border-gray-200 font-bold py-4 px-6 rounded-xl shadow-sm transition-all text-sm flex items-center justify-center gap-2 cursor-pointer w-full h-[52px]"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 flex-shrink-0">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
                 </svg>
-                <span>View QR Code</span>
+                <span className="leading-tight">View QR Code</span>
               </button>
             </div>
 
