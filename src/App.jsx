@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 export default function App() {
   const whatsappNumber = "+94717088630";
   const cleanedWaNumber = "94717088630";
+  const profileUrl = "https://card.nadeesenanayake.com/";
 
   // Form State
   const [formData, setFormData] = useState({ name: '', email: '', mobile: '', message: '' });
@@ -18,6 +19,9 @@ export default function App() {
     title: '',
     message: ''
   });
+
+  // QR Modal State
+  const [isQrModalOpen, setIsQrModalOpen] = useState(false);
 
   // Scroll Animation Observer Setup
   useEffect(() => {
@@ -89,7 +93,61 @@ export default function App() {
     }
   };
 
-  // Dynamic Social Links List (WhatsApp added here)
+  // Function to generate and download VCard (.vcf)
+  const handleDownloadContact = () => {
+    const vcardData = `BEGIN:VCARD
+VERSION:3.0
+FN:Nadee Senanayake
+TITLE:Brand Strategist & Digital Community Intelligence Specialist
+TEL;TYPE=WORK,VOICE:${whatsappNumber}
+EMAIL;TYPE=PREF,INTERNET:info@nadeesenanayake.com
+URL:https://nadeesenanayake.com/
+NOTE:Brand Strategist and Digital Community Intelligence Specialist
+END:VCARD`;
+
+    const blob = new Blob([vcardData], { type: 'text/vcard;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'Nadee_Senanayake.vcf');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    setStatusModal({
+      isOpen: true,
+      type: 'success',
+      title: 'Contact Downloaded',
+      message: 'All contact details have been successfully downloaded as a vCard file.'
+    });
+  };
+
+  // Function to download QR Code
+  const handleDownloadQR = () => {
+    const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(profileUrl)}`;
+    
+    fetch(qrImageUrl)
+      .then(response => response.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'Nadee_Senanayake_QR.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      })
+      .catch(() => {
+        setStatusModal({
+          isOpen: true,
+          type: 'error',
+          title: 'Download Failed',
+          message: 'Could not download QR code. Please try again.'
+        });
+      });
+  };
+
+  // Dynamic Social Links List
   const socialLinks = [
     {
       name: 'WhatsApp',
@@ -158,12 +216,12 @@ export default function App() {
     {
       title: 'Consumer Insight Consulting',
       description: 'Comprehensive digital qualitative audit frameworks translating audience interactions into business performance indicators.',
-      image: '/assets/your-image-1.jpg' // Add your image filename from public/assets/
+      image: '/assets/your-image-1.jpg'
     },
     {
       title: 'Digital Business Strategy Architecture',
       description: 'Building cohesive brand positioning pathways leveraging organic audience touchpoints and modern digital channels.',
-      image: '/assets/your-image-2.jpg' // Add your image filename from public/assets/
+      image: '/assets/your-image-2.jpg'
     }
   ];
 
@@ -268,7 +326,7 @@ export default function App() {
             </button>
           </div>
 
-          {/* 2. SOCIAL LINKS SECTION (Dynamic Map with Staggered Fade-in) */}
+          {/* 2. SOCIAL LINKS SECTION */}
           <div id="socials" className="bg-white p-6 sm:p-8 rounded-[28px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 animate-on-scroll opacity-0 translate-y-10 transition-all duration-700">
             <h2 className="text-2xl font-extrabold tracking-tight text-gray-900 mb-6">Social Links</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -293,7 +351,7 @@ export default function App() {
             </div>
           </div>
 
-          {/* 3. SERVICES SECTION (Dynamic Map with Staggered Fade-in) */}
+          {/* 3. SERVICES SECTION */}
           <div id="services" className="bg-white p-6 sm:p-8 rounded-[28px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 animate-on-scroll opacity-0 translate-y-10 transition-all duration-700">
             <h2 className="text-2xl font-extrabold tracking-tight text-gray-900 mb-6">Services</h2>
 
@@ -305,7 +363,6 @@ export default function App() {
                   className="w-full bg-[#f9fafb] rounded-2xl overflow-hidden border border-gray-100 group cursor-pointer hover:border-gray-200 hover:shadow-[4px_4px_15px_rgba(0,0,0,0.08)] transition-all animate-on-scroll opacity-0 translate-y-6 duration-500"
                 >
                   <div className="w-full aspect-[16/9] overflow-hidden rounded-t-2xl bg-gray-100">
-                    {/* Add your image filename from public/assets/ inside the src attribute below */}
                     <img
                       src={service.image}
                       alt={service.title}
@@ -425,13 +482,23 @@ export default function App() {
             </svg>
           </a>
 
-          <button onClick={() => setStatusModal({ isOpen: true, type: 'success', title: 'Downloading Contact', message: 'Contact file download started.' })} className="w-11 h-11 rounded-full bg-[#f9fafb] flex items-center justify-center text-gray-600 hover:bg-white hover:text-gray-900 hover:border-gray-200 hover:shadow-[3px_3px_10px_rgba(0,0,0,0.08)] transition-all active:scale-95 border border-gray-100">
+          {/* Fully Functional Download Contact Button */}
+          <button 
+            onClick={handleDownloadContact} 
+            title="Download Contact" 
+            className="w-11 h-11 rounded-full bg-[#f9fafb] flex items-center justify-center text-gray-600 hover:bg-white hover:text-gray-900 hover:border-gray-200 hover:shadow-[3px_3px_10px_rgba(0,0,0,0.08)] transition-all active:scale-95 border border-gray-100 cursor-pointer"
+          >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
             </svg>
           </button>
 
-          <button onClick={() => setStatusModal({ isOpen: true, type: 'success', title: 'QR Code', message: 'Displaying QR Code features.' })} className="w-11 h-11 rounded-full bg-[#f9fafb] flex items-center justify-center text-gray-600 hover:bg-white hover:text-gray-900 hover:border-gray-200 hover:shadow-[3px_3px_10px_rgba(0,0,0,0.08)] transition-all active:scale-95 border border-gray-100">
+          {/* Fully Functional QR Code Button */}
+          <button 
+            onClick={() => setIsQrModalOpen(true)} 
+            title="Show QR Code" 
+            className="w-11 h-11 rounded-full bg-[#f9fafb] flex items-center justify-center text-gray-600 hover:bg-white hover:text-gray-900 hover:border-gray-200 hover:shadow-[3px_3px_10px_rgba(0,0,0,0.08)] transition-all active:scale-95 border border-gray-100 cursor-pointer"
+          >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
               <path strokeLinecap="round" strokeLinejoin="round" d="M16.875 12h.008v.008h-.008V12ZM19.875 12h.008v.008h-.008V12ZM13.5 13.5h.008v.008H13.5v-.008ZM16.875 13.5h.008v.008h-.008v-.008ZM19.875 13.5h.008v.008h-.008v-.008ZM13.5 16.875h.008v.008H13.5v-.008ZM16.875 16.875h.008v.008h-.008v-.008ZM13.5 19.875h.008v.008H13.5v-.008ZM16.875 19.875h.008v.008h-.008v-.008ZM19.875 19.875h.008v.008h-.008v-.008Z" />
@@ -456,33 +523,58 @@ export default function App() {
         </div>
       </div>
 
-      {/* ANIMATED POPUP MODAL */}
-      {statusModal.isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity animate-fadeIn">
-          <div className="bg-white rounded-[28px] max-w-sm w-full p-6 sm:p-8 text-center shadow-2xl transform transition-all border border-gray-100">
-
-            <div className={`w-20 h-20 rounded-full mx-auto flex items-center justify-center mb-5 ${statusModal.type === 'success' ? 'bg-cyan-50 text-cyan-500' : 'bg-red-50 text-red-500'}`}>
-              {statusModal.type === 'success' ? (
-                <svg className="w-10 h-10 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-              ) : (
-                <svg className="w-10 h-10 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              )}
+      {/* QR CODE POPUP MODAL */}
+      {isQrModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity">
+          <div className="bg-white rounded-3xl p-6 max-w-xs w-full text-center shadow-2xl relative animate-scaleUp">
+            <h3 className="text-xl font-extrabold text-gray-900 mb-2">Scan QR Code</h3>
+            <p className="text-xs text-gray-500 mb-4">{profileUrl}</p>
+            
+            <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100 flex justify-center mb-5">
+              <img 
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(profileUrl)}`} 
+                alt="Website QR Code" 
+                className="w-48 h-48 object-contain"
+              />
             </div>
 
-            <h3 className="text-xl font-bold text-gray-900 mb-2">{statusModal.title}</h3>
-            <p className="text-sm text-gray-500 mb-6">{statusModal.message}</p>
+            <div className="flex gap-3">
+              <button
+                onClick={handleDownloadQR}
+                className="flex-1 bg-gray-900 hover:bg-black text-white font-bold py-3 px-4 rounded-xl text-sm transition-all shadow-md cursor-pointer"
+              >
+                Download QR
+              </button>
+              <button
+                onClick={() => setIsQrModalOpen(false)}
+                className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-3 px-4 rounded-xl text-sm transition-all cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
+      {/* ANIMATED POPUP MODAL */}
+      {statusModal.isOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity">
+          <div className="bg-white rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl relative">
+            <div className={`w-12 h-12 rounded-full mx-auto flex items-center justify-center mb-4 ${statusModal.type === 'success' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+              {statusModal.type === 'success' ? (
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+              ) : (
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+              )}
+            </div>
+            <h3 className="text-xl font-extrabold text-gray-900 mb-2">{statusModal.title}</h3>
+            <p className="text-sm text-gray-500 mb-6 leading-relaxed">{statusModal.message}</p>
             <button
               onClick={() => setStatusModal({ ...statusModal, isOpen: false })}
-              className="w-full py-3 bg-gray-900 hover:bg-black text-white font-bold rounded-xl transition-all shadow-md cursor-pointer"
+              className="w-full bg-gray-900 hover:bg-black text-white font-bold py-3.5 px-6 rounded-xl text-sm transition-all shadow-md cursor-pointer"
             >
-              Close
+              Okay
             </button>
-
           </div>
         </div>
       )}
