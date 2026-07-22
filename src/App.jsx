@@ -472,7 +472,7 @@ END:VCARD`;
                 />
               </div>
               <div>
-                <h4 className="font-extrabold text-gray-900 text-lg">Save & Connect</h4>
+                <h4 className="font-extrabold text-gray-900 text-lg">Save and Connect</h4>
               </div>
             </div>
 
