@@ -42,7 +42,7 @@ export default function App() {
 
     const observer = new IntersectionObserver(observerCallback, observerOptions);
     const animatedElements = document.querySelectorAll('.animate-on-scroll');
-    
+
     animatedElements.forEach(el => observer.observe(el));
 
     return () => {
@@ -113,7 +113,7 @@ END:VCARD`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    
+
     setStatusModal({
       isOpen: true,
       type: 'success',
@@ -125,7 +125,7 @@ END:VCARD`;
   // Function to download QR Code
   const handleDownloadQR = () => {
     const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(profileUrl)}`;
-    
+
     fetch(qrImageUrl)
       .then(response => response.blob())
       .then(blob => {
@@ -357,7 +357,7 @@ END:VCARD`;
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {servicesList.map((service, idx) => (
-                <div 
+                <div
                   key={idx}
                   style={{ transitionDelay: `${idx * 150}ms` }}
                   className="w-full bg-[#f9fafb] rounded-2xl overflow-hidden border border-gray-100 group cursor-pointer hover:border-gray-200 hover:shadow-[4px_4px_15px_rgba(0,0,0,0.08)] transition-all animate-on-scroll opacity-0 translate-y-6 duration-500"
@@ -456,7 +456,55 @@ END:VCARD`;
             </div>
           </div>
 
-          {/* Copyright Section */}
+          {/* FOOTER SAVE & CONNECT BOX*/}
+          <div className="hidden md:grid bg-white p-6 sm:p-8 rounded-[28px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 grid-cols-3 gap-6 items-center text-left animate-on-scroll opacity-0 translate-y-10 transition-all duration-700">
+
+            {/* Column 1: QR & Title */}
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-xl bg-gray-50 border border-gray-200 overflow-hidden flex items-center justify-center p-1 flex-shrink-0">
+                <img
+                  src="/assets/QR.png"
+                  alt="QR Code"
+                  className="w-full h-full object-contain"
+                  onError={(e) => {
+                    e.target.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(profileUrl)}`;
+                  }}
+                />
+              </div>
+              <div>
+                <h4 className="font-extrabold text-gray-900 text-lg">Save & Connect</h4>
+              </div>
+            </div>
+
+            {/* Column 2: Download Contacts Button */}
+            <div className="flex justify-center">
+              <button
+                onClick={handleDownloadContact}
+                className="bg-gray-900 hover:bg-black text-white font-bold py-3.5 px-5 rounded-xl shadow-sm transition-all text-sm flex items-center justify-center gap-2 cursor-pointer w-full"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+                <span>Download Contacts</span>
+              </button>
+            </div>
+
+            {/* Column 3: View QR Code Button */}
+            <div className="flex justify-center">
+              <button
+                onClick={() => setIsQrModalOpen(true)}
+                className="bg-[#f9fafb] hover:bg-gray-100 text-gray-800 border border-gray-200 font-bold py-3.5 px-5 rounded-xl shadow-sm transition-all text-sm flex items-center justify-center gap-2 cursor-pointer w-full"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
+                </svg>
+                <span>View QR Code</span>
+              </button>
+            </div>
+
+          </div>
+
+          {/*Footer*/}
           <div className="pt-2 text-center animate-on-scroll opacity-0 translate-y-10 transition-all duration-700">
             <p className="text-xs sm:text-sm text-gray-400 font-medium">
               Copyright © Nadee Senanayake. All Rights Reserved.
@@ -466,114 +514,100 @@ END:VCARD`;
         </div>
       </div>
 
-      {/* FLOATING BOTTOM NAVIGATION BAR */}
+      {/* FLOATING BOTTOM NAVIGATION BAR (Mobile Only) */}
       <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-sm md:hidden animate-on-scroll opacity-0 translate-y-10 transition-all duration-700">
         <div className="bg-white/90 backdrop-blur-md px-4 py-3 rounded-[24px] shadow-[0_10px_40px_rgb(0,0,0,0.1)] border border-[#00FFFF]/30 flex justify-between items-center gap-2">
 
-          <a href="#profile" className="w-11 h-11 rounded-full bg-[#f9fafb] flex items-center justify-center text-gray-600 hover:bg-white hover:text-gray-900 hover:border-gray-200 hover:shadow-[3px_3px_10px_rgba(0,0,0,0.08)] transition-all active:scale-95 border border-gray-100">
+          <a href="#profile" className="w-11 h-11 rounded-full bg-[#f9fafb] flex items-center justify-center text-gray-600 hover:bg-white hover:text-gray-900 hover:border-gray-200 transition-all active:scale-95 border border-gray-100">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
             </svg>
           </a>
 
-          <a href="#contact" className="w-11 h-11 rounded-full bg-[#f9fafb] flex items-center justify-center text-gray-600 hover:bg-white hover:text-gray-900 hover:border-gray-200 hover:shadow-[3px_3px_10px_rgba(0,0,0,0.08)] transition-all active:scale-95 border border-gray-100">
+          <a href="#contact" className="w-11 h-11 rounded-full bg-[#f9fafb] flex items-center justify-center text-gray-600 hover:bg-white hover:text-gray-900 hover:border-gray-200 transition-all active:scale-95 border border-gray-100">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 rotate-45 -translate-x-0.5 translate-y-0.5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L6 12Zm0 0h7.5" />
             </svg>
           </a>
 
-          {/* Fully Functional Download Contact Button */}
-          <button 
-            onClick={handleDownloadContact} 
-            title="Download Contact" 
-            className="w-11 h-11 rounded-full bg-[#f9fafb] flex items-center justify-center text-gray-600 hover:bg-white hover:text-gray-900 hover:border-gray-200 hover:shadow-[3px_3px_10px_rgba(0,0,0,0.08)] transition-all active:scale-95 border border-gray-100 cursor-pointer"
+          <button
+            onClick={handleDownloadContact}
+            title="Download Contact"
+            className="w-11 h-11 rounded-full bg-[#f9fafb] flex items-center justify-center text-gray-600 hover:bg-white hover:text-gray-900 hover:border-gray-200 transition-all active:scale-95 border border-gray-100 cursor-pointer"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
             </svg>
           </button>
 
-          {/* Fully Functional QR Code Button */}
-          <button 
-            onClick={() => setIsQrModalOpen(true)} 
-            title="Show QR Code" 
-            className="w-11 h-11 rounded-full bg-[#f9fafb] flex items-center justify-center text-gray-600 hover:bg-white hover:text-gray-900 hover:border-gray-200 hover:shadow-[3px_3px_10px_rgba(0,0,0,0.08)] transition-all active:scale-95 border border-gray-100 cursor-pointer"
+          <button
+            onClick={() => setIsQrModalOpen(true)}
+            title="Show QR Code"
+            className="w-11 h-11 rounded-full bg-[#f9fafb] flex items-center justify-center text-gray-600 hover:bg-white hover:text-gray-900 hover:border-gray-200 transition-all active:scale-95 border border-gray-100 cursor-pointer"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M16.875 12h.008v.008h-.008V12ZM19.875 12h.008v.008h-.008V12ZM13.5 13.5h.008v.008H13.5v-.008ZM16.875 13.5h.008v.008h-.008v-.008ZM19.875 13.5h.008v.008h-.008v-.008ZM13.5 16.875h.008v.008H13.5v-.008ZM16.875 16.875h.008v.008h-.008v-.008ZM13.5 19.875h.008v.008H13.5v-.008ZM16.875 19.875h.008v.008h-.008v-.008ZM19.875 19.875h.008v.008h-.008v-.008Z" />
-            </svg>
-          </button>
-
-          <button
-            onClick={() => {
-              if (navigator.share) {
-                navigator.share({ title: 'Nadee Senanayake', url: window.location.href });
-              } else {
-                setStatusModal({ isOpen: true, type: 'success', title: 'Link Copied', message: 'Page link copied to clipboard!' });
-              }
-            }}
-            className="w-11 h-11 rounded-full bg-[#f9fafb] flex items-center justify-center text-gray-600 hover:bg-white hover:text-gray-900 hover:border-gray-200 hover:shadow-[3px_3px_10px_rgba(0,0,0,0.08)] transition-all active:scale-95 border border-gray-100"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16.875 12h.008v.008h-.008V12ZM19.875 12h.008v.008h-.008V12ZM13.5 13.5h.008v.008H13.5v-.008ZM16.875 13.5h.008v.008h-.008v-.008ZM19.875 13.5h.008v.008h-.008v-.008ZM13.5 16.875h.008v.008H13.5v-.008ZM16.875 16.875h.008v.008h-.008v-.008ZM13.5 19.875h.008v.008H13.5v-.008ZM16.875 19.875h.008v.008h-.008v-.008ZM19.875 19.875h.008v.008h-.008V19.875Z" />
             </svg>
           </button>
 
         </div>
       </div>
 
-      {/* QR CODE POPUP MODAL */}
+      {/* QR MODAL (QR Code Display) */}
       {isQrModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity">
-          <div className="bg-white rounded-3xl p-6 max-w-xs w-full text-center shadow-2xl relative animate-scaleUp">
-            <h3 className="text-xl font-extrabold text-gray-900 mb-2">Scan QR Code</h3>
-            <p className="text-xs text-gray-500 mb-4">{profileUrl}</p>
-            
-            <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100 flex justify-center mb-5">
-              <img 
-                src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(profileUrl)}`} 
-                alt="Website QR Code" 
-                className="w-48 h-48 object-contain"
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full text-center shadow-2xl relative transform animate-in zoom-in-95 duration-200">
+            <button
+              onClick={() => setIsQrModalOpen(false)}
+              className="absolute top-4 right-4 w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 hover:text-gray-900 transition-colors cursor-pointer"
+            >
+              ✕
+            </button>
+            <h3 className="text-xl font-extrabold text-gray-900 mb-2">QR Code</h3>
+            <p className="text-sm text-gray-500 mb-6">Scan with your camera to open profile</p>
+            <div className="w-52 h-52 mx-auto bg-gray-50 border border-gray-200 rounded-2xl p-3 mb-6 flex items-center justify-center shadow-inner">
+              <img
+                src="/assets/QR.png"
+                alt="QR Code"
+                className="w-full h-full object-contain"
+                onError={(e) => {
+                  e.target.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(profileUrl)}`;
+                }}
               />
             </div>
-
-            <div className="flex gap-3">
-              <button
-                onClick={handleDownloadQR}
-                className="flex-1 bg-gray-900 hover:bg-black text-white font-bold py-3 px-4 rounded-xl text-sm transition-all shadow-md cursor-pointer"
-              >
-                Download QR
-              </button>
-              <button
-                onClick={() => setIsQrModalOpen(false)}
-                className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-3 px-4 rounded-xl text-sm transition-all cursor-pointer"
-              >
-                Close
-              </button>
-            </div>
+            <button
+              onClick={handleDownloadQR}
+              className="w-full bg-gray-900 hover:bg-black text-white font-bold py-3.5 px-6 rounded-xl shadow-md transition-all text-sm cursor-pointer"
+            >
+              Download QR Code
+            </button>
           </div>
         </div>
       )}
 
-      {/* ANIMATED POPUP MODAL */}
+      {/* STATUS MODAL (Success/Error Messages) */}
       {statusModal.isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity">
-          <div className="bg-white rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl relative">
-            <div className={`w-12 h-12 rounded-full mx-auto flex items-center justify-center mb-4 ${statusModal.type === 'success' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full text-center shadow-2xl relative transform animate-in zoom-in-95 duration-200">
+            <div className={`w-14 h-14 rounded-full mx-auto flex items-center justify-center mb-4 ${statusModal.type === 'success' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
               {statusModal.type === 'success' ? (
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
               ) : (
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
               )}
             </div>
             <h3 className="text-xl font-extrabold text-gray-900 mb-2">{statusModal.title}</h3>
             <p className="text-sm text-gray-500 mb-6 leading-relaxed">{statusModal.message}</p>
             <button
               onClick={() => setStatusModal({ ...statusModal, isOpen: false })}
-              className="w-full bg-gray-900 hover:bg-black text-white font-bold py-3.5 px-6 rounded-xl text-sm transition-all shadow-md cursor-pointer"
+              className="w-full bg-gray-900 hover:bg-black text-white font-bold py-3 px-6 rounded-xl shadow-md transition-all text-sm cursor-pointer"
             >
-              Okay
+              OK
             </button>
           </div>
         </div>
